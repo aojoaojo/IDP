@@ -1,0 +1,4 @@
+    as j.s -o j.o
+    ld j.o -o j
+    objcopy --dump-section .text=j.bin j
+    cat j.bin | ./exercicio
