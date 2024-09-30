@@ -1,0 +1,4 @@
+Nesta atividade, você deverá escrever um código em assembly x86-64
+que chame uma função que encontra-se no seguinte endereço: 0x401356
+Este endereço é fixo e não muda entre execuções. Além disso, seu código
+será colocado na seguinte região de memória fixa: 0x424242000

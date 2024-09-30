@@ -1,0 +1,27 @@
+ - Chamanda de Múltiplas Syscalls -
+
+Nesta atividade, você deverá escrever um código em assembly x86-64
+que chame a syscall read, a partir de um file descriptor
+previamente aberto, para ler o conteúdo do arquivo
+/desafio/recompensa.txt. O valor do fd é:
+
+ - 3
+
+Você pode ler o conteúdo para qualquer área de memória com permissões
+de leitura e escrita, como por exemplo a própria área de memória do
+seu payload, alguma variável global ou até mesmo a pilha.
+Esses são os endereços de memória que você pode utilizar para armazenar:
+
+ - PAYLOAD: 0x424242000  (qualquer offset em até 0x1000 bytes)
+ -  BUFFER:    0x4040c0  (variável global)
+
+Lembre-se que a quantidade de bytes lidos com read são salvas no 
+registrador RAX (retorno da chamada). A partir do conteúdo lido,
+você deverá imprimir o conteúdo utilizando utilizando a syscall
+write, de maneira similar ao desafio anterior.
+Para esta atividade, o seu payload não poderá exceder 100 bytes.
+
+O seu payload será colocado na seguinte região de memória fixa:
+
+ - 0x424242000
+

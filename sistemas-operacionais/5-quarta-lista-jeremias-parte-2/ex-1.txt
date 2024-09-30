@@ -1,0 +1,73 @@
+# Descrição
+
+Além do conjunto de permissões tradicional de leitura, escrita e execução, os
+arquivos de um sistema Linux também podem ter algumas permissões especiais
+definidas, como os bits SUID ou SGID.
+
+Um arquivo com permissões comuns de leitura, escrita e execução, pode ser o 
+seguinte:
+  
+-rwxrw-r-x 1 aluno idp 42 Sep 4 03:22 teste.elf
+
+Esse arquivo pode ser lido, escrito e executado pelo usuário aluno, mas apenas
+lido e escrito por outros usuários do grupo idp e apenas lido ou executado por
+outros usuários do sistema.
+
+Quando executamos um arquivo com permissões comuns, o processo filho criado
+herda as permissões do processo pai. Isso significa que, se o arquivo teste.elf
+acima for executado por um usuário que não seja o aluno, o processo filho
+também não terá permissão para escrever no arquivo, e será executado com as
+permissões do usuário que o executou.
+
+No entanto, se o arquivo teste.elf tiver o bit SUID ativado, ele aparece assim:
+
+-rwsr-xr-x 1 aluno idp 42 Sep 4 03:22 teste.elf
+
+Repare que o bit de execução para o usuário aluno foi substituído pelo bit SUID
+(SUID = 4). Isso significa que, quando o arquivo teste.elf é executado por um
+usuário que não seja o aluno, o processo filho será executado com as permissões
+do usuário aluno, e não do usuário que o executou. Isso é útil para permitir
+que usuários comuns executem programas que precisam de permissões especiais
+para funcionar corretamente, como por exemplo o comando passwd, que precisa
+acessar o arquivo /etc/shadow para alterar a senha de um usuário.
+
+De maneira análoga, o bit SGID (SGID = 2) faz com que o processo filho seja
+executado com as permissões do grupo dono do arquivo, aparecendo um 's' 
+no lugar do 'x' no grupo. Além destes, existe o bit de sticky (T), que é
+utilizado para proteger arquivos temporários em diretórios compartilhados.
+
+Nesta atividade, você está conectado no sistema como o usuário aluno (utilize
+o comando id para verificar), e existem dois arquivos no diretório /desafio. 
+O primeiro arquivo é um binário chamado exercicio, cujo as permissões são:
+
+-rwsr-xr-x 1 idp   aluno  16K Sep 04 13:37 exercicio
+
+ou seja, caso você execute o arquivo exercicio, o processo filho será executado
+com as permissões do usuário idp. Esse programa recebe parâmetros para a sua 
+execução e irá executar qualquer comando que seja passado (lembre-se de 
+utilizar o caminho completo para cada programa). Exemplo:
+
+./exercicio /usr/bin/id -a
+
+Que possui a seguinte saída:
+
+uid=1001(aluno) gid=1001(aluno) euid=1000(idp) groups=1001(aluno)
+
+Repare que o usuário efetivo (euid) é o idp, e o usuário real (uid) é o aluno.
+Isso nos leva ao segundo arquivo, que é o recompensa.txt, que possui as
+seguintes permissões:
+
+-r-------- 1 idp   idp     13 Sep 04 13:37 recompensa.tx
+
+Caso você tente ler o arquivo recompensa.txt, você não terá permissão para
+isso, pois o arquivo pertence ao grupo idp e apenas o usuário idp tem permissão
+de leitura. No entanto, você pode utilizar o arquivo exercicio para ler o
+conteúdo do arquivo recompensa.txt, este será possível graças ao bit SUID.
+
+Dessa forma, a sua tarefa é ler o conteúdo do arquivo recompensa.txt, que é 
+a resposta para a atividade.
+
+Observação importante: caso você faça uma cópia de um arquivo com permissões
+especiais, o arquivo copiado não terá mais as permissões especiais. Além disso,
+executar o programa no gdb ou strace pode não funcionar como esperado, pois
+esses programas também não herdam as permissões especiais.

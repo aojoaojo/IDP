@@ -1,0 +1,20 @@
+ - Chamanda da Syscall Write -
+
+Nesta atividade, você deverá escrever um código em assembly x86-64
+que chame a syscall write printf para imprimir o conteúdo
+que foi lido do arquivo /desafio/recompensa.txt. Esse conteúdo
+encontra-se no seguinte endereço:
+
+ - 0x4042cc
+
+Para utilizar a syscall write, lembre-se de de colocar no
+registrador RDI o qual representa o descritor da saída padrão,
+no registrador RSI o endereço do buffer de escrita e no registrador
+RDX o tamanho do buffer. Para esta atividade, o seu payload não
+poderá exceder 40 bytes.
+
+O seu payload será colocado na seguinte região de memória fixa:
+
+ - 0x424242000
+
+Envie até 40 bytes de instruções:  - Tamanho do payload: 30 bytes
