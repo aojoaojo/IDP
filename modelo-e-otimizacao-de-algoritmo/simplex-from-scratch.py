@@ -45,8 +45,15 @@ def maximos_por_coluna(array_de_tamanhos_maximos, max_float_por_coluna):
     return maximo_por_coluna, maximo_por_coluna_float
 
 
-def print_matriz(matriz, maximo_por_coluna, maximo_por_coluna_float):
+def print_matriz(matriz, decimais = None):
 
+    array_de_tamanhos_maximos, array_de_tamanhos_maximos_float = pega_tamanho_maximo(matriz)
+    max_float_por_coluna = trata_array_de_tamanhos_maximos_float(array_de_tamanhos_maximos_float)
+    if decimais == None:
+        maximo_por_coluna, maximo_por_coluna_float = maximos_por_coluna(array_de_tamanhos_maximos, max_float_por_coluna)
+    else:
+        maximo_por_coluna_float = [decimais] * len(matriz[0])
+        maximo_por_coluna = [decimais] * len(matriz[0])
     if maximo_por_coluna_float == []:
         for linha in matriz:
             for i in range(len(linha)):
@@ -65,9 +72,9 @@ def print_matriz(matriz, maximo_por_coluna, maximo_por_coluna_float):
 # executar o simplex matricial,s
 # reproduzir o tableau
 
-def calcular_determinante_by_upper_triangle(matriz):
+def calcular_determinante_por_escalonamento(matriz):
     tamanho = len(matriz)
-    copia = matriz
+    copia = copia_matriz(matriz)
 
     for i in range(tamanho):
         for j in range(i+1, tamanho):
@@ -83,35 +90,68 @@ def calcular_determinante_by_upper_triangle(matriz):
 
     return determinante, copia
 
-def inverter_a_matriz(matriz, determinante):
-    matriz_inversa = []
-    for i in range(len(matriz)):
-        linha = []
-        for j in range(len(matriz)):
-            linha.append(matriz[j][i] / determinante)
-        matriz_inversa.append(linha)
-    return matriz_inversa
+def copia_matriz(matriz):
+    return [[matriz[i][j] for j in range(len(matriz[0]))] for i in range(len(matriz))]
 
+def matriz_inversa(matriz):
+    copia = copia_matriz(matriz)
+    tamanho = len(matriz)
+    matriz_i = [[0 for j in range(tamanho)] for i in range(tamanho)]
+    
+    for i in range(tamanho):
+        for j in range(tamanho):
+            if i == j:
+                matriz_i[i][j] = 1
+        
+    for i in range(tamanho):
+        for j in range(i+1, tamanho):
+            if copia[i][i] == 0:
+                continue
+            fator = copia[j][i] / copia[i][i]
+            for k in range(tamanho):
+                copia[j][k] = copia[j][k] - (fator * copia[i][k])
+                matriz_i[j][k] = matriz_i[j][k] - (fator * matriz_i[i][k])
+
+    for i in range(tamanho-1, -1, -1):
+        for j in range(i-1, -1, -1):
+            if copia[i][i] == 0:
+                continue
+            fator = copia[j][i] / copia[i][i]
+            for k in range(tamanho):
+                copia[j][k] = copia[j][k] - (fator * copia[i][k])
+                matriz_i[j][k] = matriz_i[j][k] - (fator * matriz_i[i][k])
+
+    for i in range(tamanho):
+        for j in range(tamanho):
+            if copia[i][i] == 0:
+                continue
+            matriz_i[i][j] = matriz_i[i][j] / copia[i][i]
+            copia[i][j] = copia[i][j] / copia[i][i]
+
+
+    print('matriz original:')
+    print_matriz(matriz)
+
+    print('matriz copia:')
+    print_matriz(copia)
+
+    print('\nmatriz inversa:')
+    print_matriz(matriz_i, 4)
+
+    return matriz_i
 
 def main(matriz):
-    array_de_tamanhos_maximos, array_de_tamanhos_maximos_float = pega_tamanho_maximo(matriz)
-    max_float_por_coluna = trata_array_de_tamanhos_maximos_float(array_de_tamanhos_maximos_float)
-    maximo_por_coluna, maximo_por_coluna_float = maximos_por_coluna(array_de_tamanhos_maximos, max_float_por_coluna)
-    print_matriz(matriz, maximo_por_coluna, maximo_por_coluna_float)
-    determinante, m_escalonada = calcular_determinante_by_upper_triangle(matriz)
+    print_matriz(matriz)
+    
+    determinante, m_escalonada = calcular_determinante_por_escalonamento(matriz)
     print('\nDeterminante:', determinante)
 
-    array_de_tamanhos_maximos, array_de_tamanhos_maximos_float = pega_tamanho_maximo(m_escalonada)
-    max_float_por_coluna = trata_array_de_tamanhos_maximos_float(array_de_tamanhos_maximos_float)
-    maximo_por_coluna, maximo_por_coluna_float = maximos_por_coluna(array_de_tamanhos_maximos, max_float_por_coluna)
-    
     print('\nmatriz escalonada:')
-    print_matriz(m_escalonada, maximo_por_coluna, maximo_por_coluna_float)
+    print_matriz(m_escalonada)
    
-    matriz_inversa = inverter_a_matriz(matriz, determinante)
+    matriz_i = matriz_inversa(matriz)
+    
     print('\nmatriz inversa:')
-    array_de_tamanhos_maximos, array_de_tamanhos_maximos_float = pega_tamanho_maximo(matriz_inversa)
-    max_float_por_coluna = trata_array_de_tamanhos_maximos_float(array_de_tamanhos_maximos_float)
-    print_matriz(matriz_inversa, maximo_por_coluna, maximo_por_coluna_float)
+    print_matriz(matriz_i)
 
 main(matriz)
