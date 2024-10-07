@@ -351,34 +351,59 @@ matriz = [
     [1, 1, 27],
     [2, 5, 90]
     ]
-vetor_maximizacao = [-4, -6]
 
-coeficientes = [linha[:-1] for linha in matriz]
-independentes = [linha[-1] for linha in matriz]
+def todo_o_processo(funcao_objetivo, restricoes):
+    c = list(funcao_objetivo.split(','))
+    for i in range(len(c)):
+        c[i] = float(c[i])
+    A_b = [list(map(float, linha.split(','))) for linha in restricoes.split('\r')]
+    A = [linha[:-1] for linha in A_b]
+    b = [linha[-1] for linha in A_b]
 
-tabela = inicializar_tabela_simplex(coeficientes, independentes, vetor_maximizacao)
 
-iteracoes = 0
-while not verificar_solucao_otima(tabela):
-    iteracoes += 1
-    linha_pivot, coluna_pivot = encontrar_pivot(tabela)
-    if linha_pivot is None:
-        print("Problema não tem solução viável ou ilimitada.")
-        break
-    tabela = realizar_operacoes_simplex(tabela, linha_pivot, coluna_pivot)
 
-print(f'\nNúmero de iterações: {iteracoes}')
+    tabela_simplex = inicializar_tabela_simplex(A, b, c)
 
-print('\nSolução:')
-variaveis_basicas, variaveis_nao_basicas = tratar_matriz_simplex_final(tabela)
+    iteracoes = 0
+    while not verificar_solucao_otima(tabela_simplex):
+        iteracoes += 1
+        linha_pivot, coluna_pivot = encontrar_pivot(tabela_simplex)
+        if linha_pivot is None:
+            return f"Problema não tem solução viável ou ilimitada. Iterações: {iteracoes}"
+        tabela_simplex = realizar_operacoes_simplex(tabela_simplex, linha_pivot, coluna_pivot)
 
-print('\nVariáveis básicas:')
-for variavel, valor in variaveis_basicas.items():
-    print(f'{variavel} = {valor}')
+    variaveis_basicas, variaveis_nao_basicas = tratar_matriz_simplex_final(tabela_simplex)
 
-print('\nVariáveis não básicas:')
-for variavel, valor in variaveis_nao_basicas.items():
-    print(f'{variavel} = {valor}')
+    return f"Solução encontrada após {iteracoes} iterações.", tabela_simplex, variaveis_basicas, variaveis_nao_basicas
 
-print('\nTabela Simplex Final:')
-print_matriz(tabela, 4)
+# vetor_maximizacao = [-4, -6]
+
+# coeficientes = [linha[:-1] for linha in matriz]
+# independentes = [linha[-1] for linha in matriz]
+
+# tabela = inicializar_tabela_simplex(coeficientes, independentes, vetor_maximizacao)
+
+# iteracoes = 0
+# while not verificar_solucao_otima(tabela):
+#     iteracoes += 1
+#     linha_pivot, coluna_pivot = encontrar_pivot(tabela)
+#     if linha_pivot is None:
+#         print("Problema não tem solução viável ou ilimitada.")
+#         break
+#     tabela = realizar_operacoes_simplex(tabela, linha_pivot, coluna_pivot)
+
+# print(f'\nNúmero de iterações: {iteracoes}')
+
+# print('\nSolução:')
+# variaveis_basicas, variaveis_nao_basicas = tratar_matriz_simplex_final(tabela)
+
+# print('\nVariáveis básicas:')
+# for variavel, valor in variaveis_basicas.items():
+#     print(f'{variavel} = {valor}')
+
+# print('\nVariáveis não básicas:')
+# for variavel, valor in variaveis_nao_basicas.items():
+#     print(f'{variavel} = {valor}')
+
+# print('\nTabela Simplex Final:')
+# print_matriz(tabela, 4)
