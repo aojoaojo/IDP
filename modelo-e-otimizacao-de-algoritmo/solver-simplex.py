@@ -1,7 +1,27 @@
 def dividir_lista(lista, tamanho):
+    """
+    Divide uma lista em sub-listas de tamanho específico.
+
+    Args:
+        lista: A lista a ser dividida.
+        tamanho: O tamanho das sub-listas.
+
+    Retorna:
+        Uma lista de sub-listas.
+    """
     return [lista[i:i + tamanho] for i in range(0, len(lista), tamanho)]
 
 def trata_array_de_tamanhos_maximos_float(array_de_tamanhos_maximos_float, matriz):
+    """
+    Trata o array de tamanhos máximos de floats por coluna.
+
+    Args:
+        array_de_tamanhos_maximos_float: Lista de tamanhos máximos de floats por coluna.
+        matriz: A matriz a ser analisada.
+
+    Retorna:
+        Uma lista de listas contendo o tamanho máximo de floats por coluna.
+    """
     max_float_por_coluna = []
     for sublista in array_de_tamanhos_maximos_float:
         if max(sublista) > 1:
@@ -12,6 +32,15 @@ def trata_array_de_tamanhos_maximos_float(array_de_tamanhos_maximos_float, matri
     return dividir_lista(max_float_por_coluna, len(matriz[0]))
 
 def maximos_por_coluna(array_de_tamanhos_maximos, max_float_por_coluna):
+    """
+    Pega o tamanho máximo de cada coluna da matriz.
+
+    Args:
+        array_de_tamanhos_maximos: Lista de tamanhos máximos de cada coluna (inteiros).
+
+    Retorna:
+        Uma lista contendo o tamanho máximo de cada coluna.
+    """
     maximo_por_coluna, maximo_por_coluna_float = [], []
 
     for i in array_de_tamanhos_maximos:
@@ -22,6 +51,15 @@ def maximos_por_coluna(array_de_tamanhos_maximos, max_float_por_coluna):
     return maximo_por_coluna, maximo_por_coluna_float
 
 def pegar_tamanho_maximo(matriz):
+    """
+    Pega o tamanho máximo de cada coluna da matriz.
+
+    Args:
+        matriz: A matriz a ser analisada.
+
+    Retorna:
+        Uma tupla contendo duas listas: a primeira contém o tamanho máximo de cada coluna (inteiros) e a segunda contém o tamanho máximo de cada coluna (floats).
+    """
     array_de_tamanhos_maximos = []
     array_de_tamanhos_maximos_float = []
 
@@ -34,10 +72,19 @@ def pegar_tamanho_maximo(matriz):
     return dividir_lista(array_de_tamanhos_maximos, len(matriz[0])), dividir_lista(array_de_tamanhos_maximos_float, len(matriz[0]))
 
 def print_matriz(matriz, decimais=None):
+    """
+    Imprime a matriz formatada.
+
+    Args:
+        matriz: A matriz a ser impressa.
+        decimais: Número de casas decimais para floats. Se None, o número de casas decimais será o máximo encontrado na matriz.
+        
+    Retorna:
+        None
+    """
     array_de_tamanhos_maximos, array_de_tamanhos_maximos_float = pegar_tamanho_maximo(matriz)
     max_float_por_coluna = trata_array_de_tamanhos_maximos_float(array_de_tamanhos_maximos_float, matriz)
 
-    # Define maximo_por_coluna e maximo_por_coluna_float com base no parâmetro decimais
     if decimais is not None:
         maximo_por_coluna = [0] * len(matriz[0])
         maximo_por_coluna_float = [decimais] * len(matriz[0])
@@ -45,7 +92,6 @@ def print_matriz(matriz, decimais=None):
         maximo_por_coluna = [max(max(tamanhos)) for tamanhos in array_de_tamanhos_maximos]
         maximo_por_coluna_float = [max(floats) for floats in max_float_por_coluna]
 
-    # Imprime a matriz formatada
     for linha in matriz:
         for i, valor in enumerate(linha):
             if isinstance(valor, float):
@@ -55,11 +101,25 @@ def print_matriz(matriz, decimais=None):
         print()
 
 def copiar_matriz(matriz):
-    """Retorna uma cópia da matriz."""
+    """Retorna uma cópia da matriz.
+    
+    Args:
+        matriz: A matriz a ser copiada.
+
+    Retorna:
+        A cópia da matriz.            
+    """
     return [linha[:] for linha in matriz]
 
 def escalonar_matriz(matriz):
-    """Escalona a matriz e retorna a matriz escalonada. Também retorna o número de trocas de linha."""
+    """Escalona a matriz e retorna a matriz escalonada. Também retorna o número de trocas de linha.
+    
+    Args:
+        matriz: A matriz a ser escalonada.
+
+    Retorna:
+        A matriz escalonada e o número de trocas de linha.
+    """
     matriz = copiar_matriz(matriz)
     if matriz is None:
         return None, 0
@@ -86,7 +146,14 @@ def escalonar_matriz(matriz):
     return matriz, trocas_linhas
 
 def calcular_determinante(matriz):
-    """Calcula a determinante de uma matriz quadrada a partir de sua matriz escalonada."""
+    """Calcula a determinante de uma matriz quadrada a partir de sua matriz escalonada.
+    
+    Args:
+        matriz: A matriz a ser calculada.
+
+    Retorna:
+        O valor do determinante.
+    """
     matriz_escalonada, trocas_linhas = escalonar_matriz(matriz)
     n = len(matriz)
     
@@ -100,7 +167,14 @@ def calcular_determinante(matriz):
     return determinante
 
 def inversa_matriz(matriz):
-    """Calcula a inversa de uma matriz usando o método de escalonamento."""
+    """Calcula a inversa de uma matriz usando o método de escalonamento.
+    
+    Args:
+        matriz: A matriz a ser invertida.
+
+    Retorna:
+        A matriz inversa, ou None se a matriz não for quadrada.
+    """
     n = len(matriz)
     if n != len(matriz[0]):
         return None
@@ -130,7 +204,15 @@ def inversa_matriz(matriz):
     return inversa
 
 def multiplicar_matrizes(matriz1, matriz2):
-    """Multiplica duas matrizes."""
+    """Multiplica duas matrizes.
+    
+    Args:
+        matriz1: A primeira matriz.
+        matriz2: A segunda matriz.
+
+    Retorna:
+        A matriz resultante da multiplicação.
+    """
     if len(matriz1[0]) != len(matriz2):
         return None
     
@@ -155,29 +237,34 @@ def inicializar_tabela_simplex(A, b, c):
     Retorna:
     - tabela_simplex: a tabela Simplex inicializada (lista de listas).
     """
-    # Número de restrições e variáveis
     num_restricoes = len(A)
     num_variaveis = len(A[0])
 
-    # Criar a tabela Simplex vazia
     tabela_simplex = []
 
-    # Adicionar as variáveis de folga na matriz A e montar a tabela
     for i in range(num_restricoes):
-        linha = A[i] + [0] * num_restricoes + [b[i]]  # Adiciona variáveis de folga e b[i]
-        linha[num_variaveis + i] = 1  # Coloca 1 na posição da variável de folga
+        linha = A[i] + [0] * num_restricoes + [b[i]]
+        linha[num_variaveis + i] = 1
         tabela_simplex.append(linha)
 
-    # Adicionar a linha da função objetivo com os coeficientes de c (com 0 nas variáveis de folga)
     linha_objetivo = c + [0] * (num_restricoes + 1)
     tabela_simplex.append(linha_objetivo)
 
     return tabela_simplex
 
 def encontrar_pivot(tabela_simplex):
+    """
+    Encontra o elemento pivot na tabela Simplex.
+
+    Args:
+        tabela_simplex: Matriz representando a tabela Simplex (inclui a função objetivo e as restrições).
+
+    Retorna:
+        A linha e a coluna do elemento
+    """
     coluna_pivot = min((valor, idx) for idx, valor in enumerate(tabela_simplex[-1][:-1]))[1]
     if all(linha[coluna_pivot] <= 0 for linha in tabela_simplex[:-1]):
-        return None, None  # Sem solução viável
+        return None, None
 
     linha_pivot = min((tabela_simplex[i][-1] / tabela_simplex[i][coluna_pivot], i)
                       for i in range(len(tabela_simplex) - 1)
@@ -186,6 +273,18 @@ def encontrar_pivot(tabela_simplex):
     return linha_pivot, coluna_pivot
 
 def realizar_operacoes_simplex(tabela_simplex, linha_pivot, coluna_pivot):
+    """
+    Realiza as operações da iteração do método Simplex.
+
+    Args:
+        tabela_simplex: Matriz representando a tabela Simplex (inclui a função objetivo e as restrições).
+        linha_pivot: Índice da linha pivot.
+        coluna_pivot: Índice da coluna pivot.
+
+    Retorna:
+        A nova tabela Simplex após a iteração.
+    """
+
     elemento_pivot = tabela_simplex[linha_pivot][coluna_pivot]
     tabela_simplex[linha_pivot] = [x / elemento_pivot for x in tabela_simplex[linha_pivot]]
 
@@ -206,29 +305,80 @@ def verificar_solucao_otima(tabela_simplex):
     Retorna:
         True se a solução for ótima (todos os coeficientes da função objetivo >= 0), False caso contrário.
     """
-    # A função objetivo está na última linha da tabela
     funcao_objetivo = tabela_simplex[-1]
 
-    # Verificar se todos os coeficientes da função objetivo (exceto o valor da função objetivo) são >= 0
-    for coeficiente in funcao_objetivo[:-1]:  # Exclui o último valor, que é o valor atual da função objetivo
+    for coeficiente in funcao_objetivo[:-1]:
         if coeficiente < 0:
             return False
     
     return True
 
-matriz = [[-1, 1, 11], [1, 1, 27], [2, 5, 90]]
+def tratar_matriz_simplex_final(tabela_simplex):
+    """
+    Função que trata a matriz final da tabela Simplex, facilitando a saída do programa.
+    
+    Args:
+        tabela_simplex: Matriz representando a tabela Simplex (inclui a função objetivo e as restrições).
+        
+    Retorna:
+        As variáveis básicas e seus respectivos valores.
+        As variáveis não básicas e seus valores
+    """
+
+    num_variaveis_basicas = len(tabela_simplex) - 1
+
+    num_variaveis_nao_basicas = len(tabela_simplex[0]) - num_variaveis_basicas - 1
+
+    variaveis_basicas = {}
+    variaveis_nao_basicas = {}
+
+    for i in range(num_variaveis_basicas):
+
+        coluna_variavel = [linha[i] for linha in tabela_simplex[:-1]]
+        
+        if coluna_variavel.count(0) == len(coluna_variavel) - 1 and coluna_variavel.count(1) == 1:
+            variavel = coluna_variavel.index(1)
+            valor = tabela_simplex[variavel][-1]
+            variaveis_basicas[f'x_{i + 1}'] = round(valor, 4)
+
+    for i in range(num_variaveis_nao_basicas):
+        variaveis_nao_basicas[f'x_{num_variaveis_basicas + i + 1}'] = 0
+    
+    return variaveis_basicas, variaveis_nao_basicas
+    
+matriz = [
+    [-1, 1, 11],
+    [1, 1, 27],
+    [2, 5, 90]
+    ]
 vetor_maximizacao = [-4, -6]
 
 coeficientes = [linha[:-1] for linha in matriz]
 independentes = [linha[-1] for linha in matriz]
+
 tabela = inicializar_tabela_simplex(coeficientes, independentes, vetor_maximizacao)
 
+iteracoes = 0
 while not verificar_solucao_otima(tabela):
+    iteracoes += 1
     linha_pivot, coluna_pivot = encontrar_pivot(tabela)
     if linha_pivot is None:
         print("Problema não tem solução viável ou ilimitada.")
         break
     tabela = realizar_operacoes_simplex(tabela, linha_pivot, coluna_pivot)
 
-print('Tabela Simplex Final:')
+print(f'\nNúmero de iterações: {iteracoes}')
+
+print('\nSolução:')
+variaveis_basicas, variaveis_nao_basicas = tratar_matriz_simplex_final(tabela)
+
+print('\nVariáveis básicas:')
+for variavel, valor in variaveis_basicas.items():
+    print(f'{variavel} = {valor}')
+
+print('\nVariáveis não básicas:')
+for variavel, valor in variaveis_nao_basicas.items():
+    print(f'{variavel} = {valor}')
+
+print('\nTabela Simplex Final:')
 print_matriz(tabela, 4)
