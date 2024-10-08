@@ -7,8 +7,8 @@
     <title>Simplex Solver</title>
 </head>
 <body class="d-flex justify-content-center bg-secondary text-light">
-    <div class="d-flex flex-column gap-3" style="width: 50%;">
-        <h1>Simplex Solver</h1>
+    <div class="d-flex flex-column gap-3 mt-3" style="width: 50%;">
+        <h1 class="h1 d-flex justify-content-center">Simplex Solver</h1>
         <form method="POST" class="d-flex justify-content-center flex-column">
             <label for="funcao_objetivo">Coeficientes da Função Objetivo:</label><br>
             <input class="form-control bg-light" type="text" id="funcao_objetivo" name="funcao_objetivo" placeholder="Exemplo: -4, -6"><br><br>
@@ -25,8 +25,7 @@
             {% for linha in tabela %}
             <tr>
                 {% for coluna in linha %}
-                <!-- coluna com 4 casas decimais e 4 espaços separando cada coluna -->
-                <td>{{ coluna|round(4) }}</td>
+                    <td>{{ coluna|round(4) }}</td>
                 {% endfor %}
             </tr>
             {% endfor %}
