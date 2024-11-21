@@ -1,15 +1,15 @@
 tabela_parsing = {
-    'S': {'a': 'S->AB', 'b': 'S->AB', 'ε': 'S->AB'},
-    'A': {'a': 'A->aA', 'b': 'A->ε', 'ε': 'A->ε'},
-    'B': {'a': 'ERRO', 'b': 'B->bB', 'ε': 'B->ε'}
+    'S': {'a': 'S->CC', 'b': 'ERRO', 'c': 'S->CC', 'ε': 'ERRO'},
+    'A': {'a': 'A->ε', 'b': 'A->b', 'c': 'ERRO', 'ε': 'A->ε'},
+    'C': {'a': 'C->aA', 'b': 'ERRO', 'c': 'C->c', 'ε': 'ERRO'}
 }
 
 producoes = {
-    'S->AB': ['A', 'B'],
-    'A->aA': ['a', 'A'],
+    'S->CC': ['C','C'],
+    'C->aA': ['a','A'],
+    'C->c': ['c'],
+    'A->b': ['b'],
     'A->ε': ['ε'],
-    'B->bB': ['b', 'B'],
-    'B->ε': ['ε']
 }
 
 def parser(entrada):
@@ -43,5 +43,6 @@ def parser(entrada):
             print(f'{topo_pilha:<10} {entrada:<10} {"Erro"}')
             break
 
-entrada = 'ababb'
+entrada = 'aab'
+print('entrada:',entrada)
 parser(entrada)
