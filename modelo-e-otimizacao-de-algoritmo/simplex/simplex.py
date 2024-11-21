@@ -252,8 +252,6 @@ def todo_o_processo(funcao_objetivo, restricoes):
     A = [linha[:-1] for linha in A_b]
     b = [linha[-1] for linha in A_b]
 
-
-
     tabela_simplex = inicializar_tabela_simplex(A, b, c)
 
     iteracoes = 0
