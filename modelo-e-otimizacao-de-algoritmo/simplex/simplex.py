@@ -265,3 +265,112 @@ def todo_o_processo(funcao_objetivo, restricoes):
     variaveis_basicas, variaveis_nao_basicas = tratar_matriz_simplex_final(tabela_simplex)
 
     return f"Solução encontrada após {iteracoes} iterações.", tabela_simplex, variaveis_basicas, variaveis_nao_basicas
+
+def solucao_eh_inteira(variaveis_basicas):
+    """
+    Verifica se todas as variáveis básicas na solução são inteiras.
+    
+    Args:
+        variaveis_basicas: Dicionário das variáveis básicas e seus valores.
+        
+    Retorna:
+        True se todas as variáveis forem inteiras, False caso contrário.
+    """
+    for valor in variaveis_basicas.values():
+        if not valor.is_integer():
+            return False
+    return True
+
+def selecionar_variavel_para_bifurcar(variaveis_basicas):
+    """
+    Seleciona a variável fracionária para bifurcar.
+    
+    Args:
+        variaveis_basicas: Dicionário das variáveis básicas e seus valores.
+        
+    Retorna:
+        A chave (nome da variável) da primeira variável não inteira.
+    """
+    for variavel, valor in variaveis_basicas.items():
+        if not valor.is_integer():
+            return variavel
+    return None
+
+def criar_restricoes_para_bifurcar(tabela_simplex, variavel, valor):
+    """
+    Cria duas novas restrições para os ramos do Branch and Bound.
+    
+    Args:
+        tabela_simplex: Tabela Simplex atual.
+        variavel: Nome da variável que será bifurcada (ex: 'x_1').
+        valor: Valor da variável no momento (fracionário).
+        
+    Retorna:
+        Duas tabelas Simplex atualizadas para os dois ramos.
+    """
+    num_variavel = int(variavel.split('_')[1]) - 1
+    nova_restricao_inferior = [0] * len(tabela_simplex[0])
+    nova_restricao_superior = [0] * len(tabela_simplex[0])
+    
+    nova_restricao_inferior[num_variavel] = 1
+    nova_restricao_inferior[-1] = int(valor)
+    
+    nova_restricao_superior[num_variavel] = -1
+    nova_restricao_superior[-1] = -int(-valor) - 1  # -ceil(-valor)
+    
+    tabela_inferior = tabela_simplex[:-1] + [nova_restricao_inferior] + [tabela_simplex[-1]]
+    tabela_superior = tabela_simplex[:-1] + [nova_restricao_superior] + [tabela_simplex[-1]]
+    
+    return tabela_inferior, tabela_superior
+
+def avaliar_solucao(funcao_objetivo, tabela_simplex):
+    """
+    Avalia o valor da função objetivo para a solução atual.
+    
+    Args:
+        funcao_objetivo: Vetor com os coeficientes da função objetivo.
+        tabela_simplex: Tabela Simplex com a solução.
+        
+    Retorna:
+        O valor da função objetivo.
+    """
+    return tabela_simplex[-1][-1]
+
+def branch_and_bound(funcao_objetivo, restricoes):
+    """
+    Implementa o algoritmo Branch and Bound para programação inteira.
+    
+    Args:
+        funcao_objetivo: String representando a função objetivo (ex: "1,2,3").
+        restricoes: String representando as restrições (ex: "1,2,3\r4,5,6").
+        
+    Retorna:
+        A melhor solução encontrada (variáveis básicas e valor da função objetivo).
+    """
+    melhor_valor = float('-inf')
+    melhor_solucao = None
+    fila_subproblemas = [(funcao_objetivo, restricoes)]
+
+    while fila_subproblemas:
+        funcao_objetivo_atual, restricoes_atual = fila_subproblemas.pop()
+        resultado = todo_o_processo(funcao_objetivo_atual, restricoes_atual)
+
+        if isinstance(resultado, str):  # Solução inviável
+            continue
+
+        _, tabela_simplex, variaveis_basicas, _ = resultado
+
+        if solucao_eh_inteira(variaveis_basicas):
+            valor_atual = avaliar_solucao(funcao_objetivo_atual.split(','), tabela_simplex)
+            if valor_atual > melhor_valor:
+                melhor_valor = valor_atual
+                melhor_solucao = variaveis_basicas
+        else:
+            variavel = selecionar_variavel_para_bifurcar(variaveis_basicas)
+            valor = variaveis_basicas[variavel]
+
+            nova_restricao_inferior, nova_restricao_superior = criar_restricoes_para_bifurcar(tabela_simplex, variavel, valor)
+            fila_subproblemas.append((funcao_objetivo_atual, nova_restricao_inferior))
+            fila_subproblemas.append((funcao_objetivo_atual, nova_restricao_superior))
+
+    return melhor_solucao, melhor_valor
