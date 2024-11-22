@@ -3,29 +3,6 @@ from simplex import *
 
 app = Flask(__name__)
 
-# Processa as restrições e a função objetivo
-def processar_input(funcao_objetivo, restricoes):
-    """
-    Processa a entrada de função objetivo e restrições fornecida pelo usuário.
-
-    Args:
-        funcao_objetivo: String com os coeficientes da função objetivo.
-        restricoes: String com as restrições no formato "a,b,c\nx,y,z".
-
-    Retorna:
-        A, b, funcao_objetivo: Matriz A das restrições, vetor b, e vetor da função objetivo.
-    """
-    # Processa função objetivo
-    funcao_objetivo = [float(x) for x in funcao_objetivo.split(',')]
-
-    # Processa restrições - múltiplas linhas
-    restricoes = [[float(num) for num in linha.split(',')] for linha in restricoes.splitlines()]
-    
-    A = [linha[:-1] for linha in restricoes]
-    b = [linha[-1] for linha in restricoes]
-    
-    return A, b, funcao_objetivo
-
 @app.route('/', methods=['GET', 'POST'])
 def branch_and_bound_solver():
     """
