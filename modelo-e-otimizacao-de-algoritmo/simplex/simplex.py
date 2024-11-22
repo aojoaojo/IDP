@@ -244,11 +244,18 @@ def tratar_matriz_simplex_final(tabela_simplex):
     
     return variaveis_basicas, variaveis_nao_basicas
     
-def todo_o_processo(funcao_objetivo, restricoes):
-    c = list(funcao_objetivo.split(','))
-    for i in range(len(c)):
-        c[i] = float(c[i])
-    A_b = [list(map(float, linha.split(','))) for linha in restricoes.split('\r')]
+def simplex(funcao_objetivo, restricoes):
+    # Processa a função objetivo
+    c = list(map(float, funcao_objetivo.split(',')))
+
+    # Processa as restrições dependendo do formato
+    if isinstance(restricoes, str):
+        A_b = [list(map(float, linha.split(','))) for linha in restricoes.split('\r')]
+    elif isinstance(restricoes, list):
+        A_b = copiar_matriz(restricoes)  # Garante que não alteramos a entrada original
+    else:
+        raise ValueError("O parâmetro 'restricoes' deve ser uma string ou uma matriz (lista de listas).")
+
     A = [linha[:-1] for linha in A_b]
     b = [linha[-1] for linha in A_b]
 
