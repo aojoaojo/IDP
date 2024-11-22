@@ -135,20 +135,24 @@ def inicializar_tabela_simplex(A, b, c):
     Retorna:
     - tabela_simplex: a tabela Simplex inicializada (lista de listas).
     """
-    num_restricoes = len(A)
-    num_variaveis = len(A[0])
+    num_variaveis = len(c)
+    num_restricoes = len(b)
 
-    tabela_simplex = []
-
+    # Criação da tabela com zeros
+    tabela = []
     for i in range(num_restricoes):
-        linha = A[i] + [0] * num_restricoes + [b[i]]
-        linha[num_variaveis + i] = 1
-        tabela_simplex.append(linha)
+        linha = [0] * (num_variaveis + num_restricoes + 1)  # Inclui espaço para variáveis de folga e b
+        for j in range(num_variaveis):
+            linha[j] = A[i][j]
+        linha[num_variaveis + i] = 1  # Adiciona a variável de folga
+        linha[-1] = b[i]  # Adiciona a constante do lado direito
+        tabela.append(linha)
 
-    linha_objetivo = c + [0] * (num_restricoes + 1)
-    tabela_simplex.append(linha_objetivo)
+    # Adiciona a linha da função objetivo
+    funcao_objetivo = [-coef for coef in c] + [0] * (num_restricoes + 1)
+    tabela.append(funcao_objetivo)
 
-    return tabela_simplex
+    return tabela
 
 def encontrar_pivot(tabela_simplex):
     """
