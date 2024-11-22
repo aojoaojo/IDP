@@ -364,7 +364,7 @@ def branch_and_bound(funcao_objetivo, restricoes):
 
     while fila_subproblemas:
         funcao_objetivo_atual, restricoes_atual = fila_subproblemas.pop()
-        resultado = todo_o_processo(funcao_objetivo_atual, restricoes_atual)
+        resultado = simplex(funcao_objetivo_atual, restricoes_atual)
 
         if isinstance(resultado, str):  # Solução inviável
             continue

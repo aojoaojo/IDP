@@ -23,7 +23,7 @@ def simplex_solver():
         funcao_objetivo = request.form.get('funcao_objetivo')
         restricoes = request.form.get('restricoes')
         
-        resultado, tabela, variaveis_basicas, variaveis_nao_basicas = simplex.todo_o_processo( funcao_objetivo, restricoes )
+        resultado, tabela, variaveis_basicas, variaveis_nao_basicas = simplex.simplex( funcao_objetivo, restricoes )
         
     return render_template('index.html',  resultado=resultado, tabela=tabela, variaveis_basicas=variaveis_basicas, variaveis_nao_basicas=variaveis_nao_basicas)
 
