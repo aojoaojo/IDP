@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<h1>Finalizar Compra</h1>
+
+<h2>Total do Carrinho: R$ {{ total_carrinho }}</h2>
+
+<h2>Formas de Pagamento Disponíveis:</h2>
+<ul>
+  {% for forma_pagamento in formas_pagamento %}
+    <li>{{ forma_pagamento.descricao }}</li>
+  {% endfor %}
+</ul>
+
+{% endblock %}

@@ -1,0 +1,4 @@
+FastAPI == "0.104.1" 
+SQLAlchemy == "2.0.23"
+Pydantic == "2.5.0"
+Psycopg2

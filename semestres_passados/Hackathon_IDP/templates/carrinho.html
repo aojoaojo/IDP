@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+    <h1>Carrinho</h1>
+
+    <div id="carrinho-itens" class = "grid3">
+        {% for produto_id, produto_info in produtos_api.items() %}
+            <div class="carrinho-item">
+                <h3>{{ produto_info['nome'] }}</h3>
+                <img src="{{ produto_info['imagem'] }}" alt="{{ produto_info['nome'] }}">
+            </div>
+        {% endfor %}
+    </div>
+    <div id="carrinho-total">
+        <h3>Total: R$ {{ total }}</h3>
+        <form action="/finalizar-compra" method="POST">
+            <input type="submit" value="Finalizar compra">
+        </form>
+    </div>
+
+{% endblock %}

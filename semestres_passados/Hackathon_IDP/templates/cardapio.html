@@ -1,0 +1,34 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <h1>Cardápio</h1>
+
+    <!-- <section class="grid1">
+        <p>Selecione a categoria</p>
+        <form action="/cardapio" method="POST">
+            <select name="categoria">
+                {% for categoria in resposta %}
+                    <option value="{{ categoria['id'] }}">{{ categoria['nome'] }}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="Registrar">
+        </form>
+    </section> -->
+
+    {% for categoria in resposta %}
+        <h2>{{ categoria['nome'] }}</h2>
+        <div class="grid3">
+            {% for produto in categoria['produtos'] %}
+                <div class="grid3-item">
+                    <h3>{{ produto['nome'] }}</h3 class = "nome_produto">
+                    <h4> R${{ produto['valorUnitario'] }}</h4 class = "preco">
+                    <img src="{{ produto['fotoUrl'] }}" alt="{{ produto }}">
+                    <form action="/carrinho/add" method="POST">
+                        <input type="hidden" name="produto_id" value="{{ produto['id'] }}">
+                        <input type="submit" value="Adicionar ao Carrinho" class = "Adicionar_carrinho">
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+
+{% endblock %}

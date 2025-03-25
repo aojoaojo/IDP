@@ -1,0 +1,17 @@
+project-root/
+│
+├── src/
+│   ├── components/
+│   │   ├── models/
+│   │   │   ├── paciente.py        # Modelo SQLAlchemy para Paciente
+│   │   ├── schemas/
+│   │   │   ├── paciente.py        # Modelos Pydantic para Paciente
+│   ├── routers/
+│   │   ├── paciente.py            # Endpoints CRUD para Pacientes
+│   ├── main.py                    # Ponto de entrada da aplicação
+
+
+uvicorn main:app --reload
+docker build -t my_fastapi_backend .
+docker run -d -p 8000:8000 my_fastapi_backend
+streamlit run app/streamlit_app.py
