@@ -1,10 +1,7 @@
 
 def input_de_equacao():
-  # equacao1 = input('Digite a primeira equação do sistema: ')
-  # equacao2 = input('Digite a segunda equação do sistema: ')
-  # return equacao1, equacao2 
-  equacao1 = '-x - 2y = -4'
-  equacao2 = '-x + y = -1'
+  equacao1 = input('Digite a primeira equação do sistema: ')
+  equacao2 = input('Digite a segunda equação do sistema: ')
 
   x = equacao1[:(idx:=equacao1.index('x'))]
   y = equacao1[idx+1:(idy:=equacao1.index('y'))]
